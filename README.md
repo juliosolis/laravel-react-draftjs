@@ -101,7 +101,14 @@ password: admin
 Check it live here
 
 ```
-http://
+https://challenge.juliosolis.com/
+```
+
+Next Steps
+
+```
+Separate API request to api.php routes file
+Use Laravel passport to improve API request security
 ```
 
 ## Built With
