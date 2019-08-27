@@ -10,7 +10,7 @@
             <div class="col-md-10">
                 <div class="card">
                     <div class="card-header">
-                        Create new Email
+                        Edit Email: "{{ $email->subject }}"
                         <a href="{{ route('email') }}" class="btn btn-outline-info float-right">
                             <i class="fa fa-arrow-left" aria-hidden="true"></i>
                             Return
@@ -24,7 +24,7 @@
                             </div>
                         @endif
 
-                        <div id="editor" data-id="{{ $email->id }}"></div>
+                        <div id="emailUpdate" data-id="{{ $email->id }}"></div>
 
                     </div>
                 </div>

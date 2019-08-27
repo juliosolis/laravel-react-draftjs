@@ -89012,6 +89012,8 @@ __webpack_require__(/*! ./components/Example */ "./resources/js/components/Examp
 
 __webpack_require__(/*! ./components/EmailEditor */ "./resources/js/components/EmailEditor.js");
 
+__webpack_require__(/*! ./components/EmailUpdate */ "./resources/js/components/EmailUpdate.js");
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
@@ -89111,12 +89113,12 @@ var EmailEditor =
 function (_Component) {
   _inherits(EmailEditor, _Component);
 
-  function EmailEditor(props) {
+  function EmailEditor() {
     var _this;
 
     _classCallCheck(this, EmailEditor);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(EmailEditor).call(this, props));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(EmailEditor).call(this));
     _this.state = {
       subject: '',
       editorState: draft_js__WEBPACK_IMPORTED_MODULE_3__["EditorState"].createEmpty(),
@@ -89235,9 +89237,6 @@ function (_Component) {
         });
       });
     }
-  }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {}
   }, {
     key: "render",
     value: function render() {
@@ -89435,6 +89434,396 @@ if (document.getElementById('editor')) {
   var element = document.getElementById('editor');
   var props = Object.assign({}, element.dataset);
   react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EmailEditor, props), document.getElementById('editor'));
+}
+
+/***/ }),
+
+/***/ "./resources/js/components/EmailUpdate.js":
+/*!************************************************!*\
+  !*** ./resources/js/components/EmailUpdate.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return EmailUpdate; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! draft-js */ "./node_modules/draft-js/lib/Draft.js");
+/* harmony import */ var draft_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(draft_js__WEBPACK_IMPORTED_MODULE_3__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+
+var EmailUpdate =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(EmailUpdate, _Component);
+
+  function EmailUpdate(props) {
+    var _this;
+
+    _classCallCheck(this, EmailUpdate);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(EmailUpdate).call(this, props));
+    _this.state = {
+      subject: '',
+      editorState: draft_js__WEBPACK_IMPORTED_MODULE_3__["EditorState"].createEmpty(),
+      msg: '',
+      errors: {
+        'subject': false,
+        'body': false
+      }
+    };
+
+    _this.focus = function () {
+      return _this.refs.editor.focus();
+    };
+
+    _this.handleChangeSubject = _this.handleChangeSubject.bind(_assertThisInitialized(_this));
+    _this.onChangeEditor = _this.onChangeEditor.bind(_assertThisInitialized(_this));
+    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this)); // Draftjs rich text editor
+
+    _this.handleKeyCommand = _this._handleKeyCommand.bind(_assertThisInitialized(_this));
+    _this.mapKeyToEditorCommand = _this._mapKeyToEditorCommand.bind(_assertThisInitialized(_this));
+    _this.toggleBlockType = _this._toggleBlockType.bind(_assertThisInitialized(_this));
+    _this.toggleInlineStyle = _this._toggleInlineStyle.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(EmailUpdate, [{
+    key: "_handleKeyCommand",
+    value: function _handleKeyCommand(command, editorState) {
+      var newState = draft_js__WEBPACK_IMPORTED_MODULE_3__["RichUtils"].handleKeyCommand(editorState, command);
+
+      if (newState) {
+        this.onChangeEditor(newState);
+        return true;
+      }
+
+      return false;
+    }
+  }, {
+    key: "_mapKeyToEditorCommand",
+    value: function _mapKeyToEditorCommand(e) {
+      if (e.keyCode === 9
+      /* TAB */
+      ) {
+          var newEditorState = draft_js__WEBPACK_IMPORTED_MODULE_3__["RichUtils"].onTab(e, this.state.editorState, 4
+          /* maxDepth */
+          );
+
+          if (newEditorState !== this.state.editorState) {
+            this.onChangeEditor(newEditorState);
+          }
+
+          return;
+        }
+
+      return Object(draft_js__WEBPACK_IMPORTED_MODULE_3__["getDefaultKeyBinding"])(e);
+    }
+  }, {
+    key: "_toggleBlockType",
+    value: function _toggleBlockType(blockType) {
+      this.onChangeEditor(draft_js__WEBPACK_IMPORTED_MODULE_3__["RichUtils"].toggleBlockType(this.state.editorState, blockType));
+    }
+  }, {
+    key: "_toggleInlineStyle",
+    value: function _toggleInlineStyle(inlineStyle) {
+      this.onChangeEditor(draft_js__WEBPACK_IMPORTED_MODULE_3__["RichUtils"].toggleInlineStyle(this.state.editorState, inlineStyle));
+    }
+  }, {
+    key: "handleChangeSubject",
+    value: function handleChangeSubject(e) {
+      var newSubject = e.target.value;
+      this.setState(function (prevState) {
+        return {
+          subject: newSubject,
+          errors: _objectSpread({}, prevState.errors, {
+            subject: newSubject.length > 0 ? false : true
+          })
+        };
+      });
+    }
+  }, {
+    key: "onChangeEditor",
+    value: function onChangeEditor(editorState) {
+      var currentContent = editorState.getCurrentContent(); // console.log(currentContent);
+      // console.log(convertToRaw(currentContent));
+
+      this.setState({
+        editorState: editorState
+      });
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit(e) {
+      var _this2 = this;
+
+      e.preventDefault();
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('/email/save', {
+        subject: this.state.subject,
+        body: JSON.stringify({
+          content: Object(draft_js__WEBPACK_IMPORTED_MODULE_3__["convertToRaw"])(this.state.editorState.getCurrentContent())
+        })
+      }).then(function (res) {
+        _this2.setState({
+          subject: '',
+          editorState: draft_js__WEBPACK_IMPORTED_MODULE_3__["EditorState"].createEmpty(),
+          msg: 'Your emails was successful saved!'
+        });
+
+        setTimeout(function () {
+          this.setState({
+            msg: ''
+          });
+        }.bind(_this2), 5000);
+      })["catch"](function (error) {
+        _this2.setState({
+          errors: error.response.data.errors
+        });
+      });
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this3 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/email/view/' + this.state.id).then(function (response) {
+        _this3.setState({
+          news: response.data
+        });
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var editorState = this.state.editorState;
+      var className = 'RichEditor-editor';
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        onSubmit: this.handleSubmit
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "alert alert-success " + (this.state.msg == '' ? 'd-none' : '')
+      }, this.state.msg, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        className: "close",
+        "data-dismiss": "alert",
+        "aria-label": "Close"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        "aria-hidden": "true"
+      }, "\xD7"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Subject:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "form-control " + (this.state.errors.subject ? 'is-invalid' : ''),
+        onChange: this.handleChangeSubject,
+        value: this.state.subject,
+        type: "text"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "invalid-feedback"
+      }, "Please type a subject.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: className,
+        onClick: this.focus
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(BlockStyleControls, {
+        editorState: editorState,
+        onToggle: this.toggleBlockType
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(InlineStyleControls, {
+        editorState: editorState,
+        onToggle: this.toggleInlineStyle
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(draft_js__WEBPACK_IMPORTED_MODULE_3__["Editor"], {
+        blockStyleFn: getBlockStyle,
+        customStyleMap: styleMap,
+        editorState: editorState // handleKeyCommand={this.handleKeyCommand}
+        // keyBindingFn={this.mapKeyToEditorCommand}
+        ,
+        onChange: this.onChangeEditor,
+        placeholder: "Write your email...",
+        ref: "editor",
+        spellCheck: true
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "submit",
+        className: "btn btn-primary"
+      }, "Submit"));
+    }
+  }]);
+
+  return EmailUpdate;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]); // Custom overrides for "code" style.
+
+
+
+var styleMap = {
+  CODE: {
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
+    fontSize: 16,
+    padding: 2
+  }
+};
+
+function getBlockStyle(block) {
+  switch (block.getType()) {
+    case 'blockquote':
+      return 'RichEditor-blockquote';
+
+    default:
+      return null;
+  }
+}
+
+var StyleButton =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(StyleButton, _React$Component);
+
+  function StyleButton() {
+    var _this4;
+
+    _classCallCheck(this, StyleButton);
+
+    _this4 = _possibleConstructorReturn(this, _getPrototypeOf(StyleButton).call(this));
+
+    _this4.onToggle = function (e) {
+      e.preventDefault();
+
+      _this4.props.onToggle(_this4.props.style);
+    };
+
+    return _this4;
+  }
+
+  _createClass(StyleButton, [{
+    key: "render",
+    value: function render() {
+      var className = 'RichEditor-styleButton';
+
+      if (this.props.active) {
+        className += ' RichEditor-activeButton';
+      }
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: className,
+        onMouseDown: this.onToggle
+      }, this.props.label);
+    }
+  }]);
+
+  return StyleButton;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+var BLOCK_TYPES = [{
+  label: 'H1',
+  style: 'header-one'
+}, {
+  label: 'H2',
+  style: 'header-two'
+}, {
+  label: 'H3',
+  style: 'header-three'
+}, {
+  label: 'H4',
+  style: 'header-four'
+}, {
+  label: 'H5',
+  style: 'header-five'
+}, {
+  label: 'H6',
+  style: 'header-six'
+}, {
+  label: 'Blockquote',
+  style: 'blockquote'
+}, {
+  label: 'UL',
+  style: 'unordered-list-item'
+}, {
+  label: 'OL',
+  style: 'ordered-list-item'
+}, {
+  label: 'Code Block',
+  style: 'code-block'
+}];
+
+var BlockStyleControls = function BlockStyleControls(props) {
+  var editorState = props.editorState;
+  var selection = editorState.getSelection();
+  var blockType = editorState.getCurrentContent().getBlockForKey(selection.getStartKey()).getType();
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "RichEditor-controls"
+  }, BLOCK_TYPES.map(function (type) {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(StyleButton, {
+      key: type.label,
+      active: type.style === blockType,
+      label: type.label,
+      onToggle: props.onToggle,
+      style: type.style
+    });
+  }));
+};
+
+var INLINE_STYLES = [{
+  label: 'Bold',
+  style: 'BOLD'
+}, {
+  label: 'Italic',
+  style: 'ITALIC'
+}, {
+  label: 'Underline',
+  style: 'UNDERLINE'
+}, {
+  label: 'Monospace',
+  style: 'CODE'
+}];
+
+var InlineStyleControls = function InlineStyleControls(props) {
+  var currentStyle = props.editorState.getCurrentInlineStyle();
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "RichEditor-controls"
+  }, INLINE_STYLES.map(function (type) {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(StyleButton, {
+      key: type.label,
+      active: currentStyle.has(type.style),
+      label: type.label,
+      onToggle: props.onToggle,
+      style: type.style
+    });
+  }));
+};
+
+if (document.getElementById('emailUpdate')) {
+  var element = document.getElementById('emailUpdate');
+  var props = Object.assign({}, element.dataset);
+  react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EmailUpdate, props), document.getElementById('emailUpdate'));
 }
 
 /***/ }),

@@ -4,8 +4,8 @@ import axios from 'axios';
 import {Editor, EditorState, convertToRaw, RichUtils, getDefaultKeyBinding} from 'draft-js';
 
 export default class EmailEditor extends Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
             subject: '',
             editorState: EditorState.createEmpty(),
@@ -116,10 +116,6 @@ export default class EmailEditor extends Component {
                     errors: error.response.data.errors
                 });
             });
-    }
-
-    componentDidMount() {
-
     }
 
     render() {

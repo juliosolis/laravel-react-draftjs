@@ -119,7 +119,11 @@ export default class EmailUpdate extends Component {
     }
 
     componentDidMount() {
-
+        axios.get('/email/view/' + this.state.id).then(response => {
+            this.setState({news: response.data});
+        }).catch(error => {
+            console.log(error);
+        });
     }
 
     render() {
@@ -271,8 +275,8 @@ const InlineStyleControls = (props) => {
     );
 };
 
-if (document.getElementById('editor')) {
-    const element = document.getElementById('editor');
+if (document.getElementById('emailUpdate')) {
+    const element = document.getElementById('emailUpdate');
     const props = Object.assign({}, element.dataset);
-    ReactDOM.render(<EmailUpdate {...props}/>, document.getElementById('editor'));
+    ReactDOM.render(<EmailUpdate {...props}/>, document.getElementById('emailUpdate'));
 }
