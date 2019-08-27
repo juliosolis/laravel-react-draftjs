@@ -13,5 +13,4 @@ require('./bootstrap');
  */
 
 require('./components/Example');
-require('./components/Demo');
-require('./components/Editor');
+require('./components/EmailEditor');

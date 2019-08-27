@@ -16,7 +16,6 @@ class EmailController extends Controller
     public function index()
     {
         $emails = Email::where('user_id', auth()->user()->id)->get();
-//        dd($emails);
 
         return view('email.index', compact('emails'));
     }
@@ -39,7 +38,6 @@ class EmailController extends Controller
      */
     public function store(EmailCreateRequest $request)
     {
-
         $email = Email::create($request->all());
 
         return [
@@ -68,7 +66,7 @@ class EmailController extends Controller
      */
     public function edit(Email $email)
     {
-        //
+        return view('email.edit', compact('email'));
     }
 
     /**

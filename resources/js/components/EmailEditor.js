@@ -1,35 +1,28 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import {Editor, EditorState, RichUtils, getDefaultKeyBinding, convertToRaw} from 'draft-js';
 import axios from 'axios';
-import debounce from 'lodash/debounce';
+import {Editor, EditorState, convertToRaw, RichUtils, getDefaultKeyBinding} from 'draft-js';
 
-class EmailEditor extends Component {
+export default class EmailEditor extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            editorState: EditorState.createEmpty()
+            subject: '',
+            editorState: EditorState.createEmpty(),
+            msg: '',
+            errors: {
+                'subject': false,
+                'body': false
+            }
         };
+
         this.focus = () => this.refs.editor.focus();
 
-        this.saveContent = debounce((content) => {
-            axios('/email/save', {
-                method: 'POST',
-                body: JSON.stringify({
-                    content: convertToRaw(content),
-                }),
-                headers: new Headers({
-                    'Content-Type': 'application/json'
-                })
-            })
-        }, 1000);
+        this.handleChangeSubject = this.handleChangeSubject.bind(this);
+        this.onChangeEditor = this.onChangeEditor.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
 
-        this.onChange = (editorState) => {
-            let currentContent = editorState.getCurrentContent();
-            this.saveContent(currentContent);
-            console.log(currentContent);
-            this.setState({editorState});
-        };
+        // Draftjs rich text editor
         this.handleKeyCommand = this._handleKeyCommand.bind(this);
         this.mapKeyToEditorCommand = this._mapKeyToEditorCommand.bind(this);
         this.toggleBlockType = this._toggleBlockType.bind(this);
@@ -39,7 +32,7 @@ class EmailEditor extends Component {
     _handleKeyCommand(command, editorState) {
         const newState = RichUtils.handleKeyCommand(editorState, command);
         if (newState) {
-            this.onChange(newState);
+            this.onChangeEditor(newState);
             return true;
         }
         return false;
@@ -53,7 +46,7 @@ class EmailEditor extends Component {
                 4, /* maxDepth */
             );
             if (newEditorState !== this.state.editorState) {
-                this.onChange(newEditorState);
+                this.onChangeEditor(newEditorState);
             }
             return;
         }
@@ -61,7 +54,7 @@ class EmailEditor extends Component {
     }
 
     _toggleBlockType(blockType) {
-        this.onChange(
+        this.onChangeEditor(
             RichUtils.toggleBlockType(
                 this.state.editorState,
                 blockType
@@ -70,7 +63,7 @@ class EmailEditor extends Component {
     }
 
     _toggleInlineStyle(inlineStyle) {
-        this.onChange(
+        this.onChangeEditor(
             RichUtils.toggleInlineStyle(
                 this.state.editorState,
                 inlineStyle
@@ -78,39 +71,82 @@ class EmailEditor extends Component {
         );
     }
 
-    saveContent(content) {
-        console.log('here');
-        debounce((content) => {
-            console.log('more   ');
+    handleChangeSubject(e) {
+        const newSubject = e.target.value;
+        this.setState(prevState => {
+            return {
+                subject: newSubject,
+                errors:
+                    {
+                        ...prevState.errors,
+                        subject: newSubject.length > 0 ? false : true
+                    }
+            }
+        });
+    }
 
-            axios('/content', {
-                method: 'POST',
-                body: JSON.stringify({
-                    content: convertToRaw(content),
-                }),
-                headers: new Headers({
-                    'Content-Type': 'application/json'
-                })
+    onChangeEditor(editorState) {
+        let currentContent = editorState.getCurrentContent();
+        // console.log(currentContent);
+        // console.log(convertToRaw(currentContent));
+        this.setState({editorState});
+    };
+
+    handleSubmit(e) {
+        e.preventDefault();
+        axios.post('/email/save', {
+            subject: this.state.subject,
+            body: JSON.stringify({
+                content: convertToRaw(this.state.editorState.getCurrentContent()),
             })
-        }, 1000);
+        })
+            .then(res => {
+                this.setState({
+                    subject: '',
+                    editorState: EditorState.createEmpty(),
+                    msg: 'Your emails was successful saved!'
+                });
+
+                setTimeout(function () {
+                    this.setState({msg: ''});
+                }.bind(this), 5000);
+            })
+            .catch(error => {
+                this.setState({
+                    errors: error.response.data.errors
+                });
+            });
+    }
+
+    componentDidMount() {
+
     }
 
     render() {
         const {editorState} = this.state;
-        // If the user changes block type before entering any text, we can
-        // either style the placeholder or hide it. Let's just hide it now.
         let className = 'RichEditor-editor';
-        let contentState = editorState.getCurrentContent();
-        if (!contentState.hasText()) {
-            if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-                className += ' RichEditor-hidePlaceholder';
-            }
-        }
-        return (
-            <div className="emailEditor">
-                <input className="form-control mb-2" type="text" placeholder="Type Subject"/>
 
-                <div className="RichEditor-root">
+        return (
+            <form onSubmit={this.handleSubmit}>
+
+                <div className={"alert alert-success " + (this.state.msg == '' ? 'd-none' : '')}>
+                    {this.state.msg}
+                    <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div className="form-group">
+                    <label>Subject:</label>
+                    <input
+                        className={"form-control " + (this.state.errors.subject ? 'is-invalid' : '')}
+                        onChange={this.handleChangeSubject}
+                        value={this.state.subject}
+                        type="text"/>
+                    <div className="invalid-feedback">
+                        Please type a subject.
+                    </div>
+                </div>
+                <div className={className} onClick={this.focus}>
                     <BlockStyleControls
                         editorState={editorState}
                         onToggle={this.toggleBlockType}
@@ -119,21 +155,20 @@ class EmailEditor extends Component {
                         editorState={editorState}
                         onToggle={this.toggleInlineStyle}
                     />
-                    <div className={className} onClick={this.focus}>
-                        <Editor
-                            blockStyleFn={getBlockStyle}
-                            customStyleMap={styleMap}
-                            editorState={editorState}
-                            handleKeyCommand={this.handleKeyCommand}
-                            keyBindingFn={this.mapKeyToEditorCommand}
-                            onChange={this.onChange}
-                            placeholder="Write your email..."
-                            ref="editor"
-                            spellCheck={true}
-                        />
-                    </div>
+                    <Editor
+                        blockStyleFn={getBlockStyle}
+                        customStyleMap={styleMap}
+                        editorState={editorState}
+                        // handleKeyCommand={this.handleKeyCommand}
+                        // keyBindingFn={this.mapKeyToEditorCommand}
+                        onChange={this.onChangeEditor}
+                        placeholder="Write your email..."
+                        ref="editor"
+                        spellCheck={true}
+                    />
                 </div>
-            </div>
+                <button type="submit" className="btn btn-primary">Submit</button>
+            </form>
         );
     }
 }
@@ -237,8 +272,7 @@ const InlineStyleControls = (props) => {
 };
 
 if (document.getElementById('editor')) {
-    ReactDOM.render(
-        <EmailEditor/>,
-        document.getElementById('editor')
-    );
+    const element = document.getElementById('editor');
+    const props = Object.assign({}, element.dataset);
+    ReactDOM.render(<EmailEditor {...props}/>, document.getElementById('editor'));
 }

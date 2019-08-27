@@ -15,31 +15,6 @@ Route::get('/', function () {
     return view('cover');
 });
 
-Route::get('/demo', function () {
-    return [
-        [
-            'id' => 1,
-            'name' => 'Julio',
-            'age' => 35,
-        ],
-        [
-            'id' => 2,
-            'name' => 'Nesla',
-            'age' => 34,
-        ],
-        [
-            'id' => 3,
-            'name' => 'Jr',
-            'age' => 8,
-        ],
-        [
-            'id' => 4,
-            'name' => 'Yulia',
-            'age' => 2,
-        ]
-    ];
-});
-
 Auth::routes();
 
 Route::group(['middleware' => ['auth']], function () {
@@ -48,7 +23,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'email'], function () {
         Route::get('/', 'EmailController@index')->name('email');
         Route::get('new', 'EmailController@create')->name('email.new');
+        Route::get('edit/{email}', 'EmailController@edit')->name('email.edit');
+
         Route::post('save', 'EmailController@store')->name('email.store');
+        Route::put('update/{email}', 'EmailController@update')->name('email.update');
         Route::delete('delete', 'EmailController@destroy')->name('email.delete');
     });
 });

@@ -35,7 +35,8 @@
                                         <td>{{ $email->subject }}</td>
                                         <td>{{ $email->created_at->isoFormat('dddd D, MMM YYYY') }}</td>
                                         <td>
-                                            <form action="{{ route('email.delete') }}" method="post">
+                                            <a href="{{ route('email.edit',[$email]) }}">Edit</a> |
+                                            <form style="display: inline-block" action="{{ route('email.delete') }}" method="post">
                                                 @csrf
                                                 @method('DELETE')
                                                 <input type="hidden" name="id" value="{{ $email->id }}">

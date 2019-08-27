@@ -12,10 +12,31 @@ export default class Example extends Component {
     }
 
     componentDidMount() {
-        axios.get('/demo').then(response => {
-            this.setState({news: response.data});
-        }).catch(error => {
-            console.log(error);
+        this.setState({
+            news: [
+                {
+                    'id': 1,
+                    'name': 'Julio',
+                    'age': 35,
+                },
+                {
+                    'id': 2,
+                    'name': 'Nesla',
+                    'age': 34,
+                }
+                ,
+                {
+                    'id': 3,
+                    'name': 'Jr',
+                    'age': 8,
+                }
+                ,
+                {
+                    'id': 4,
+                    'name': 'Yulia',
+                    'age': 2,
+                }
+            ]
         });
     }
 

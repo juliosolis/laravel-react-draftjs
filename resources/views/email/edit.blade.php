@@ -24,7 +24,7 @@
                             </div>
                         @endif
 
-                        <div id="editor"></div>
+                        <div id="editor" data-id="{{ $email->id }}"></div>
 
                     </div>
                 </div>
