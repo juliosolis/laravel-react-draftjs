@@ -24,6 +24,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/', 'EmailController@index')->name('email');
         Route::get('new', 'EmailController@create')->name('email.new');
         Route::get('edit/{email}', 'EmailController@edit')->name('email.edit');
+        Route::get('view/{email}', 'EmailController@show')->name('email.view');
 
         Route::post('save', 'EmailController@store')->name('email.store');
         Route::put('update/{email}', 'EmailController@update')->name('email.update');

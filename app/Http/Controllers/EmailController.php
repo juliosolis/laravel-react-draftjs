@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Email;
+use App\Http\Requests\EmailUpdateRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests\EmailCreateRequest;
 
@@ -55,7 +56,7 @@ class EmailController extends Controller
      */
     public function show(Email $email)
     {
-        //
+        return $email;
     }
 
     /**
@@ -76,9 +77,15 @@ class EmailController extends Controller
      * @param \App\Email $email
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Email $email)
+    public function update(EmailUpdateRequest $request, Email $email)
     {
-        //
+        $email->update($request->all());
+
+        return [
+            'success' => true,
+            'id' => $email->id,
+            'email' => $email
+        ];
     }
 
     /**

@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import {Editor, EditorState, convertToRaw, RichUtils, getDefaultKeyBinding} from 'draft-js';
+import {Editor, EditorState, convertToRaw, convertFromRaw, RichUtils, getDefaultKeyBinding} from 'draft-js';
 
 export default class EmailUpdate extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            id: props.id,
             subject: '',
             editorState: EditorState.createEmpty(),
             msg: '',
@@ -94,7 +95,7 @@ export default class EmailUpdate extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        axios.post('/email/save', {
+        axios.put('/email/update/' + this.state.id, {
             subject: this.state.subject,
             body: JSON.stringify({
                 content: convertToRaw(this.state.editorState.getCurrentContent()),
@@ -102,8 +103,6 @@ export default class EmailUpdate extends Component {
         })
             .then(res => {
                 this.setState({
-                    subject: '',
-                    editorState: EditorState.createEmpty(),
                     msg: 'Your emails was successful saved!'
                 });
 
@@ -120,7 +119,14 @@ export default class EmailUpdate extends Component {
 
     componentDidMount() {
         axios.get('/email/view/' + this.state.id).then(response => {
-            this.setState({news: response.data});
+            this.setState({
+                subject: response.data.subject,
+                editorState: EditorState.createWithContent(
+                    convertFromRaw(
+                        JSON.parse(response.data.body).content
+                    )
+                )
+            });
         }).catch(error => {
             console.log(error);
         });
@@ -171,7 +177,7 @@ export default class EmailUpdate extends Component {
                         spellCheck={true}
                     />
                 </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="submit" className="btn btn-primary">Save</button>
             </form>
         );
     }
