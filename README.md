@@ -38,58 +38,82 @@ Switch to the repo folder
 cd laravel-react-draftjs
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+Install all the dependencies using composer
 
 ```
-Give an example
+composer install
 ```
 
-### And coding style tests
-
-Explain what these tests test and why
+Copy the example env file and make the required configuration changes in the .env file
 
 ```
-Give an example
+cp .env.example .env
 ```
 
-## Deployment
+Generate a new application key
 
-Add additional notes about how to deploy this on a live system
+```
+php artisan key:generate
+```
+
+Run the database migrations (**Set the database connection in .env before migrating**)
+
+```
+php artisan migrate --seed
+```
+
+Compile, bundle and minify all CSS and JS files. (**mostly for production**)
+
+```
+npm run prod
+```
+
+Start the local development server
+
+```
+php artisan serve
+```
+
+**TL;DR command list**
+
+```
+git clone git@github.com:juliosolis/laravel-react-draftjs.git
+cd laravel-react-draftjs
+composer install
+cp .env.example .env
+php artisan key:generate
+```
+    
+**Make sure you set the correct database connection information before running the migrations** [Environment variables](#environment-variables)
+
+```
+php artisan migrate --seed
+php artisan serve
+```
+
+You can now access the server at http://localhost:8000 with credentials
+
+```
+user: admin@admin.com
+password: admin
+```
+
+Check it live here
+
+```
+http://
+```
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+* [Laravel](https://laravel.com/docs/5.8) - The PHP Framework for Web Artisans
+* [React](https://reactjs.org/docs/getting-started.html) - A JavaScript library for building user interfaces
+* [Draftjs](https://draftjs.org/docs/getting-started) - RICH TEXT EDITOR FRAMEWORK FOR REACT
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+* **Julio Solis** [LinkedIn](https://www.linkedin.com/in/juliosolisl/)
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
