@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import {Editor, EditorState, convertToRaw, RichUtils, getDefaultKeyBinding} from 'draft-js';
+import {Editor, EditorState, convertToRaw, RichUtils, getDefaultKeyBinding, convertFromRaw} from 'draft-js';
 
 export default class EmailEditor extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
+            id: props.id ? props.id : null,
             subject: '',
             editorState: EditorState.createEmpty(),
             msg: '',
@@ -86,36 +87,66 @@ export default class EmailEditor extends Component {
     }
 
     onChangeEditor(editorState) {
-        let currentContent = editorState.getCurrentContent();
-        // console.log(currentContent);
-        // console.log(convertToRaw(currentContent));
         this.setState({editorState});
     };
 
     handleSubmit(e) {
         e.preventDefault();
-        axios.post('/email/save', {
-            subject: this.state.subject,
-            body: JSON.stringify({
-                content: convertToRaw(this.state.editorState.getCurrentContent()),
+        let res = null;
+        if (this.state.id == null) {
+            res = axios.post('/email/save', {
+                subject: this.state.subject,
+                body: JSON.stringify({
+                    content: convertToRaw(this.state.editorState.getCurrentContent()),
+                })
             })
-        })
-            .then(res => {
+        } else {
+            res = axios.put('/email/update/' + this.state.id, {
+                subject: this.state.subject,
+                body: JSON.stringify({
+                    content: convertToRaw(this.state.editorState.getCurrentContent()),
+                })
+            })
+        }
+        res.then(res => {
+            if (this.state.id == null) {
                 this.setState({
                     subject: '',
                     editorState: EditorState.createEmpty(),
                     msg: 'Your emails was successful saved!'
                 });
+            } else {
+                this.setState({
+                    msg: 'Your emails was successful updated!'
+                })
+            }
 
-                setTimeout(function () {
-                    this.setState({msg: ''});
-                }.bind(this), 5000);
-            })
+            setTimeout(function () {
+                this.setState({msg: ''});
+            }.bind(this), 5000);
+        })
             .catch(error => {
                 this.setState({
                     errors: error.response.data.errors
                 });
             });
+    }
+
+    componentDidMount() {
+        if (this.state.id) {
+            axios.get('/email/view/' + this.state.id).then(response => {
+                this.setState({
+                    subject: response.data.subject,
+                    editorState: EditorState.createWithContent(
+                        convertFromRaw(
+                            JSON.parse(response.data.body).content
+                        )
+                    )
+                });
+            }).catch(error => {
+                console.log(error);
+            });
+        }
     }
 
     render() {
@@ -163,7 +194,9 @@ export default class EmailEditor extends Component {
                         spellCheck={true}
                     />
                 </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="submit" className="btn btn-primary">
+                    {this.state.id == null ? 'Submit' : 'Update'}
+                </button>
             </form>
         );
     }

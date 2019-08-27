@@ -18,13 +18,8 @@
                     </div>
 
                     <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
 
-                        <div id="emailUpdate" data-id="{{ $email->id }}"></div>
+                        <div id="editor" data-id="{{ $email->id }}"></div>
 
                     </div>
                 </div>

@@ -14,4 +14,3 @@ require('./bootstrap');
 
 require('./components/Example');
 require('./components/EmailEditor');
-require('./components/EmailUpdate');
