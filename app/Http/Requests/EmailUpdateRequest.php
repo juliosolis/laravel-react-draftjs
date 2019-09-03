@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Draft;
 use Illuminate\Foundation\Http\FormRequest;
 
 class EmailUpdateRequest extends FormRequest
@@ -25,7 +26,7 @@ class EmailUpdateRequest extends FormRequest
     {
         return [
             'subject' => 'required',
-            'body' => 'required'
+            'body' => new Draft
         ];
     }
 }
