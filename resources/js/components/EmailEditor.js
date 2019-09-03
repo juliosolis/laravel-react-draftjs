@@ -87,7 +87,16 @@ export default class EmailEditor extends Component {
     }
 
     onChangeEditor(editorState) {
-        this.setState({editorState});
+        this.setState(prevState => {
+            return {
+                editorState: editorState,
+                errors:
+                    {
+                        ...prevState.errors,
+                        body: editorState.getCurrentContent().hasText() > 0 ? false : true
+                    }
+            }
+        });
     };
 
     handleSubmit(e) {
@@ -193,6 +202,9 @@ export default class EmailEditor extends Component {
                         ref="editor"
                         spellCheck={true}
                     />
+                    <div className="invalid-feedback" style={{display: this.state.errors.body ? 'block' : 'none'}}>
+                        Please write an email.
+                    </div>
                 </div>
                 <button type="submit" className="btn btn-primary">
                     {this.state.id == null ? 'Submit' : 'Update'}
